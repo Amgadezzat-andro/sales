@@ -13,6 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.auth.login');
+Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
+
+    Route::get('dashboard', 'DashboardController@index')->name('admin.dashboard');
+    Route::get('logout', 'LoginController@logout')->name('admin.logout');
+
+
 });
+
+Route::group(['namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin', 'middleware' => 'guest:admin'], function () {
+    Route::get('login', 'LoginController@showLoginForm')->name('admin.show-login');
+    Route::post('login', 'LoginController@login')->name('admin.login');
+
+});
+// Route::get('/', function () {
+//     return view('admin.auth.login');
+// });
